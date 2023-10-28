@@ -1,2 +1,5 @@
-Grammar is empty.
-
+<S>
+<S>=[a]
+<B>=<C>
+<C>=[b]
+.Inconsistent

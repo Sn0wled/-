@@ -7,6 +7,25 @@
 
 // группирует правила в порядке появления нетерминалов
 void group_rules(grammar & g1, grammar & g2) {
+    SSET P, Q;
+    g2.set_start_from(g1);
+    Q.insert(g1.start());
+    int count_rules = g1.count();
+    while (Q.count() != 0) {
+        SYMB symb = Q[1];
+        P.insert(symb);
+        Q.remove(1);
+        for (int i = 1; i <= count_rules; i++) {
+            RULE rule = g1[i];
+            if (rule[0] == symb) {
+                g2.rule_add_from(g1, rule);
+                int rule_length = rule.count();
+                for (int j = 1; j <= rule_length; j++) {
+                    if (P.misses(rule[j])) Q.insert(rule[j]);
+                }
+            }
+        }
+    }
 }
 
 // точка входа в алгоритм
