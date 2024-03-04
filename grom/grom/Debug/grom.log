@@ -1,2 +1,3 @@
-﻿  12-aufa.cpp
-  grom.vcxproj -> C:\PLT\grom\Debug\grom.exe
+﻿  13-dfa.cpp
+D:\Программирование\PLT\grom\grom\13-dfa.cpp(65,12): warning C4244: инициализация: преобразование "SYMB" в "char", возможна потеря данных
+  grom.vcxproj -> D:\Программирование\PLT\grom\Debug\grom.exe
