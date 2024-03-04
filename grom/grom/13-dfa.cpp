@@ -12,10 +12,20 @@ SSET inspected;
 
 // вычисляет замыкание A состояния НКА state
 void closure(SYMB state, SSET& A, NFA& fa1) {
+	for (int i = 1; i <= fa1.delta_count(); i++) {
+		TRAN tran = fa1[i];
+		if (tran.a == state && tran.c == 0) if (!A.contains(tran.b)) {
+			A.insert(tran.b);
+			closure(tran.b, A, fa1);
+		}
+	}
 }
 
 // вычисляет замыкание A состояния ДКА A
 void closureA(SSET& A, NFA& fa1) {
+	for (int i = 1; i <= A.count(); i++) {
+		closure(A[i], A, fa1);
+	}
 }
 
 // вычисляет 2^(n-1)
@@ -32,11 +42,14 @@ int reg_state(SSET& A, NFA& fa1, NFA& fa2) {
 	char buf[16] = {};
 	int number = 0;
 	int final = 0;
-	SYMB regstate;
+	SYMB regstate = 0;
+	closureA(A, fa1);
 	for (int i = 1; i <= A.count(); i++) {
 		int s_id = A[i];
 		number += power2n(s_id);
-		if (fa1.finals.contains(s_id)) final = 1;
+		if (fa1.finals.contains(s_id)) {
+			final = 1;
+		}
 	}
 	sprintf(buf, "%d", number);
 	regstate = fa2.reg_state_id(buf);
@@ -48,21 +61,32 @@ int reg_state(SSET& A, NFA& fa1, NFA& fa2) {
 // A - состояние ДКА - множество состояний НКА
 // initial - признак начального состояния
 int follow_dfa_state(SSET A, NFA fa1, NFA& fa2, int initial = 0) {
+	SSET T, C;
 	SYMB state_a = 0, state_b = 0;
 	state_a = reg_state(A, fa1, fa2);
-	inspected.insert(state_a);
 	if (initial) fa2.initials.insert(state_a);
-	SSET T, C;
-	for (int t = 1; t <= fa1.delta_count(); t++) {
+	inspected.insert(state_a);
+	for (int a = 1; a <= A.count(); a++) {
+		SYMB state = A[a];
+		for (int t = 1; t <= fa1.delta_count(); t++) {
+			TRAN tran = fa1[t];
+			if (tran.a == state) {
+				T.insert(t);
+				C.insert(tran.c);
+			}
+		}
+	}
+	/*for (int t = 1; t <= fa1.delta_count(); t++) {
 		TRAN tran = fa1[t];
 		if (A.contains(tran.a)) {
 			T.insert(t);
 			C.insert(tran.c);
 		}
-	}
+	}*/
 	for (int c = 1; c <= C.count(); c++) {
 		SSET B;
 		char sym = C[c];
+		if (sym == 0) continue;
 		for (int t = 1; t <= T.count(); t++) {
 			TRAN tran = fa1[T[t]];
 			if (tran.c == sym) B.insert(tran.b);
