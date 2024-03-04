@@ -20,19 +20,39 @@ void closureA(SSET & A, NFA & fa1) {
 
 // вычисляет 2^(n-1)
 int power2n(int n) {
-    return 0;
+    if (n > 31) throw "power2n: too many states found";
+    int m = 1;
+    for (int i = 1; i < n; i++) m <<= 1;
+    return m;
 }
 
 // вычисляет идентификатор состояния ДКА, регистрирует его
 // регистрирует финальное состояние, если есть
 int reg_state(SSET & A, NFA & fa1, NFA & fa2) {
-    return 0;
+    char buf[16] = {};
+    int number = 0;
+    int final;
+    SYMB regstate;
+    for (int i = 1; i <= A.count(); i++) {
+        int s = A[i];
+        final = fa1.finals.contains(s);
+        number += power2n(s);
+    }
+    sprintf(buf, "%d", number);
+    regstate = fa2.reg_state_id(buf);
+    if (final) fa2.finals.insert(regstate);
+    return regstate;
 }
 
 // ищет другие состояния
 // A - состояние ДКА - множество состояний НКА
 // initial - признак начального состояния
 int follow_dfa_state(SSET A, NFA fa1, NFA & fa2, int initial = 0) {
+    SSET T, C;
+    int state_a = 0, state_b = 0;
+    state_a = reg_state(A, fa1, fa2);
+    if (initial) fa1.initials.insert(state_a);
+    inspected.insert(state_a);
     return 1;
 }
 

@@ -58,7 +58,7 @@ int grau_to_fa(grammar & gr, NFA & fa) {
         tran.a = A;
         tran.b = B;
         tran.c = a;
-        fa.tran_add(tran);
+        fa.tran_add(tran); 
     }
     return 1;
 }
