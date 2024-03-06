@@ -8,6 +8,15 @@
 
 // обращает автомат
 void fa_invert(NFA & fa) {
+    for (int i = 1; i <= fa.delta_count(); i++) {
+        TRAN& t = fa[i];
+        SYMB tmp = t.a;
+        t.a = t.b;
+        t.b = tmp;
+    }
+    SSET tmp = fa.initials;
+    fa.initials = fa.finals;
+    fa.finals = tmp;
 }
 
 // точка входа в алгоритм

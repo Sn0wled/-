@@ -17,7 +17,9 @@ char current() {
 }
 // следующий символ выражени€
 char getnext() {
-    return 0;
+    char c = rx[index];
+    if (c != 10) index++;
+    return c;
 }
 // первичный автомат
 void primary(NFA & fa, NFA & part, char c) {
@@ -33,24 +35,55 @@ void unite(NFA & fa, NFA & part, NFA & tail) {
 }
 // элемент выражени€
 int P(NFA & fa, NFA & part) {
+    char c = getnext();
+    int result;
+    if (c == 10) {
+        return 10;
+    }
+    else if (c == '(') {
+        // выражение в скобках
+        result = E(fa, part);
+        if (result != 1) return result;
+    }
+    else if (c == '1') {
+        // константа
+    }
+    else if (c > 122) {
+        // недопустимый знак
+    }
+    else if (c > 96) {
+        // переменна€
+    }
     return 0;
 }
 // унарна€ операци€
 int U(NFA & fa, NFA & part) {
+    char c = 0;
+    int result = T(fa, part);
     return 1;
 }
 // конкатенации
 int T(NFA & fa, NFA & part) {
+    NFA tail;
+    char c = 0;
+    int result = T(fa, part);
     return 1;
 }
 // объединени€
 int E(NFA & fa, NFA & part) {
+    NFA tail;
+    char c = 0;
+    int result = T(fa, part);
     return 1;
 }
 
 // преобразует регул€рное выражение в конечный автомат
 int rex_to_fa(char * rex, NFA & fa) {
-    return 0;
+    rx = rex;
+    NFA part;
+    int result = E(fa, part);
+    fa = part;
+    return result;
 }
 
 // точка входа в алгоритм
