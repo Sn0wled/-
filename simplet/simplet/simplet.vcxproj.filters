@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lexan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa1null.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa2RD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa3LL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa4LR.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa5LLT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa7LLA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sa8LRA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ststrip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stsyms.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sttot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="syntall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="syntallo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="syntalr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="simplet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
