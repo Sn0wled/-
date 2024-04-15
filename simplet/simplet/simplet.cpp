@@ -31,7 +31,7 @@ int simplet(FILE * input) {
 
 int main(int argc, char * argv[]) {
     // открываем входной поток
-    FILE * input = fopen("c:\\simplet\\1.st", "rt");
+    FILE * input = fopen("1.st", "rt");
     if (!input) {
         // проблемы с входным файлом
         printf("simplet: error while open input file\n\n");
