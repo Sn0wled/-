@@ -1,0 +1,6 @@
+<S>=[s]
+<S>=<ES>
+<ES>=[;]
+<AO>=[id][=]<E>
+<PRINT>=[print]<E>
+<E>=[e]
