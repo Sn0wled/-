@@ -14,7 +14,7 @@
 // лексический анализатор
 #include "lexan.h"
 // синтаксический анализатор
-#include "sa1null.h"
+#include "sa3LL.h"
 
 int simplet(FILE * input) {
     // программные исключения

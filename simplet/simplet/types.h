@@ -18,44 +18,106 @@ typedef enum sttype : stack_t {
     OUT_START = 997,
     TOK_COMMENT,
     TOK_UNKNOWN,
-    // токены
+    //  0 EOT
+     //  1 [string]
+     //  2 [id]
+     //  3 [;]
+     //  4 [int]
+     //  5 [,]
+     //  6 [{]
+     //  7 [}]
+     //  8 [if]
+     //  9 [(]
+     // 10 [)]
+     // 11 [=]
+     // 12 [print]
+     // 13 [||]
+     // 14 [&&]
+     // 15 [!]
+     // 16 [==]
+     // 17 [>]
+     // 18 [<]
+     // 19 [+]
+     // 20 [-]
+     // 21 [*]
+     // 22 [/]
+     // 23 [quote]
+     // 24 [I4]
+     // 25 <M>
+     // 26 <DD>
+     // 27 <SS>
+     // 28 <D>
+     // 29 <D.>
+     // 30 <S>
+     // 31 <S.>
+     // 32 <E>
+     // 33 <OR>
+     // 34 <OR.>
+     // 35 <AND>
+     // 36 <AND.>
+     // 37 <NOT>
+     // 38 <C>
+     // 39 <C.>
+     // 40 <AS>
+     // 41 <AS.>
+     // 42 <MD>
+     // 43 <MD.>
+     // 44 <U>
+     // 45 <V>
+
+     // токены
     TOK_EOT = 0,
-    TOK_LF,
-    TOK_DIM,
-    TOK_LONG,
+    TOK_STRING,
     TOK_ID,
+    TOK_SEMI,
+    TOK_INT,
     TOK_COMMA,
-    TOK_EQ,
+    TOK_LS,
+    TOK_RS,
     TOK_IF,
-    TOK_THEN,
-    TOK_END,
-    TOK_ELSE,
+    TOK_LP,
+    TOK_RP,
+    TOK_ASS,
     TOK_PRINT,
-    TOK_NE,
-    TOK_LT,
+    TOK_LOR,
+    TOK_LAND,
+    TOK_LNOT,
+    TOK_EQ,
     TOK_GT,
+    TOK_LT,
     TOK_ADD,
     TOK_SUB,
     TOK_MUL,
     TOK_DIV,
+    TOK_QUOTE,
     TOK_I4,
-    TOK_LP,
-    TOK_RP,
-    TOK_LAST = TOK_RP,
+    TOK_LAST = TOK_I4,
     // нетерминалы
     SYM_M,
-    SYM_S,
+    SYM_DD,
+    SYM_SS,
+    SYM_D,
     SYM_D_,
+    SYM_S,
+    SYM_S_,
     SYM_E,
-    SYM_A,
-    SYM_R,
-    SYM_R_,
-    SYM_T,
-    SYM_T_,
-    SYM_P,
-    SYM_P_,
-    SYM_LAST = SYM_P_,
+    SYM_OR,
+    SYM_OR_,
+    SYM_AND,
+    SYM_AND_,
+    SYM_NOT,
+    SYM_C,
+    SYM_C_,
+    SYM_AS,
+    SYM_AS_,
+    SYM_MD,
+    SYM_MD_,
+    SYM_U,
+    SYM_V,
+    SYM_LAST = SYM_V,
     // конец символов грамматики
+
+
     // символы генератора кода
     OUT_ID,
     OUT_I4,
@@ -85,17 +147,17 @@ typedef enum sttype : stack_t {
     OUT_LE,
     OUT_GE,
     TOK_R8,
-    TOK_QUOTE,
-    TOK_LS,
-    TOK_RS,
     TOK_LB,
     TOK_RB,
     TOK_AND,
     TOK_OR,
     TOK_NOT,
-    TOK_ASS,
     TOK_LE,
-    TOK_GE
+    TOK_GE,
+    TOK_THEN,
+    TOK_END,
+    TOK_ELSE,
+    TOK_NE,
 } _sttype;
 
 // токен

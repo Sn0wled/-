@@ -115,6 +115,14 @@ class lexan {
             tok.stt = TOK_ELSE;
             return 1;
         }
+        if (!strcmp(tok.str_val, "string")) {
+            tok.stt = TOK_STRING;
+            return 1;
+        }
+        if (!strcmp(tok.str_val, "int")) {
+            tok.stt = TOK_INT;
+            return 1;
+        }
         return 1;
     }
     // принимает целое число
@@ -272,6 +280,14 @@ class lexan {
                 return 1;
             }
             return 0;
+        case ';':
+            tok.stt = TOK_SEMI;
+            next_char();
+            return 1;
+        case ',':
+            tok.stt = TOK_COMMA;
+            next_char();
+            return 1;
         default:
             printf("%c", cc);
             break;
