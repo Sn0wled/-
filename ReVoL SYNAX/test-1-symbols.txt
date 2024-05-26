@@ -1,0 +1,14 @@
+// 0 EOT
+// 1 [id]
+// 2 [int]
+// 3 <M>
+
+    // токены
+    TOK_EOT = 0,
+    TOK_ID,
+    TOK_INT,
+    TOK_LAST = TOK_INT,
+    // нетерминалы
+    SYM_M,
+    SYM_LAST = SYM_M,
+    // конец символов грамматики
