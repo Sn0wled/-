@@ -95,6 +95,8 @@ class lexan {
     }
     // определяет ключевое слово
     int is_keyword(sttoken & tok) {
+        char* p = tok.str_val;
+        for (; *p; ++p) *p = tolower(*p);
         if (!strcmp(tok.str_val, "print")) {
             tok.stt = TOK_PRINT;
             return 1;
@@ -115,12 +117,24 @@ class lexan {
             tok.stt = TOK_ELSE;
             return 1;
         }
-        if (!strcmp(tok.str_val, "string")) {
+        /*if (!strcmp(tok.str_val, "string")) {
             tok.stt = TOK_STRING;
             return 1;
-        }
-        if (!strcmp(tok.str_val, "int")) {
+        }*/
+        /*if (!strcmp(tok.str_val, "int")) {
             tok.stt = TOK_INT;
+            return 1;
+        }*/
+        if (!strcmp(tok.str_val, "dim")) {
+            tok.stt = TOK_DIM;
+            return 1;
+        }
+        if (!strcmp(tok.str_val, "as")) {
+            tok.stt = TOK_AS;
+            return 1;
+        }
+        if (!strcmp(tok.str_val, "long")) {
+            tok.stt = TOK_LONG;
             return 1;
         }
         return 1;
@@ -133,6 +147,8 @@ class lexan {
             switch (TOT[cc])
             {
             case DIGIT:
+                tok.int_val *= 10;
+                tok.int_val += cc - '0';
                 break;
             case CHDOT:
                 return is_float(tok, 0);
@@ -145,6 +161,8 @@ class lexan {
     }
     // разбирает вещественную часть числа
     int is_float(sttoken & tok, int must) {
+        double number = 0;
+        int div = 0;
         tok.stt = TOK_R8;
         while (true) {
             next_char();
@@ -154,9 +172,14 @@ class lexan {
                 fprintf(error_stream, "\nlexan: extra dot in float\n\n");
                 return 0;
             case DIGIT:
+                div++;
+                number *= 10;
+                number += cc - '0';
                 must = 0;
                 break;
             default:
+                tok.dbl_val = tok.int_val;
+                tok.dbl_val += number / pow(10, div);
                 if (must == 1) {
                     fprintf(error_stream, "\nlexan: single dot in float\n\n");
                 }
@@ -168,11 +191,15 @@ class lexan {
     // разбирает строковый литерал
     int is_quote(sttoken & tok) {
         tok.stt = TOK_QUOTE;
+        char buffer[30];
+        int count = 0;
         while (true)
         {
             next_char();
+            buffer[count++] = cc;
             if (TOT[cc] == QUOTE) {
                 next_char();
+                buffer[count++] = cc;
                 if (TOT[cc] != QUOTE) {
                     return 1;
                 }
@@ -198,54 +225,72 @@ class lexan {
         {
         case '+':
             tok.stt = TOK_ADD;
+            tok.str_val[0] = '+';
             next_char();
             return 1;
         case '-':
             tok.stt = TOK_SUB;
+            tok.str_val[0] = '-';
             next_char();
             return 1;
         case '*':
             tok.stt = TOK_MUL;
+            tok.str_val[0] = '*';
             next_char();
             return 1;
         case '=':
-            tok.stt = TOK_ASS;
+            tok.stt = TOK_EQ;
+            tok.str_val[0] = '=';
             next_char();
             if (cc == '=') {
                 tok.stt = TOK_EQ;
+                tok.str_val[1] = '=';
                 next_char();
             }
             return 1;
         case '!':
             tok.stt = TOK_NOT;
+            tok.str_val[0] = '!';
             next_char();
             if (cc == '=') {
                 tok.stt = TOK_NE;
+                tok.str_val[1] = '+';
                 next_char();
             }
             return 1;
         case '<':
             tok.stt = TOK_LT;
             next_char();
+            tok.str_val[0] = '<';
             if (cc == '=') {
                 tok.stt = TOK_LE;
+                tok.str_val[1] = '=';
+                next_char();
+            }
+            else if (cc == '>') {
+                tok.stt = TOK_NE;
+                tok.str_val[1] = '>';
                 next_char();
             }
             return 1;
         case '>':
             tok.stt = TOK_GT;
             next_char();
+            tok.str_val[0] = '>';
             if (cc == '=') {
                 tok.stt = TOK_GE;
+                tok.str_val[1] = '=';
                 next_char();
             }
             return 1;
         case '(':
             tok.stt = TOK_LP;
+            tok.str_val[0] = '(';
             next_char();
             return 1;
         case ')':
             tok.stt = TOK_RP;
+            tok.str_val[0] = ')';
             next_char();
             return 1;
         case '{':
@@ -302,15 +347,17 @@ public:
             if (cc == EOF) {
                 // конец текста
                 tok.stt = TOK_EOT;
+                strcpy(tok.str_val, "eof");
                 return 1;
             } else if (cc == 10) {
                 // строку подсчитываем
-                /*/
+                
                 // если в языке есть токен LF
                 tok.stt = TOK_LF;
+                strcpy(tok.str_val, "lf");
                 next_char();
                 return 1;
-                /*/
+                
             } else if (cc == '/') {
                 // слэш неоднозначен в Си
                 sttype result = is_comment();

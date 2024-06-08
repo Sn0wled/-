@@ -1,0 +1,70 @@
+//  0 EOT
+//  1 [LF]
+//  2 [dim]
+//  3 [id]
+//  4 [as]
+//  5 [long]
+//  6 [=]
+//  7 [if]
+//  8 [then]
+//  9 [else]
+// 10 [end]
+// 11 [print]
+// 12 [<>]
+// 13 [<]
+// 14 [>]
+// 15 [+]
+// 16 [-]
+// 17 [*]
+// 18 [/]
+// 19 [I4]
+// 20 [(]
+// 21 [)]
+// 22 <M>
+// 23 <S>
+// 24 <E>
+// 25 <A>
+// 26 <R>
+// 27 <R.>
+// 28 <T>
+// 29 <T.>
+// 30 <P>
+// 31 <P.>
+
+    // токены
+    TOK_EOT = 0,
+    TOK_LF,
+    TOK_DIM,
+    TOK_ID,
+    TOK_AS,
+    TOK_LONG,
+    TOK_EQ,
+    TOK_IF,
+    TOK_THEN,
+    TOK_ELSE,
+    TOK_END,
+    TOK_PRINT,
+    TOK_NE,
+    TOK_LT,
+    TOK_GT,
+    TOK_ADD,
+    TOK_SUB,
+    TOK_MUL,
+    TOK_DIV,
+    TOK_I4,
+    TOK_LP,
+    TOK_RP,
+    TOK_LAST = TOK_RP,
+    // нетерминалы
+    SYM_M,
+    SYM_S,
+    SYM_E,
+    SYM_A,
+    SYM_R,
+    SYM_R_,
+    SYM_T,
+    SYM_T_,
+    SYM_P,
+    SYM_P_,
+    SYM_LAST = SYM_P_,
+    // конец символов грамматики

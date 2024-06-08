@@ -1,5 +1,7 @@
-int a;
-print(2 + 4);
-if (a > 0) {
-	a = 24
-}
+Dim A As Long 
+A = 1 
+If A <> 0 Then 
+Print 3 + A * 5 
+Else 
+Print 0 
+End If
