@@ -84,7 +84,7 @@ public:
 		}
 		out(OUT_END);
 		strip.print(parse_stream);
-
+		execute();
 		fprintf(parse_stream, "\nsyntaxan: success.\n\n");
 		return 1;
 	}
@@ -117,13 +117,13 @@ private:
 		int i = 0, j = 0;
 		sttoken t = tok;
 		t.stt = tt;
-        switch (tt) { 
-		case OUT_PUSH: 
-			j = strip.new_label(); 
-			stl.push(j); 
-			t.int_val = j; 
-			t.stt = OUT_LABEL; 
-			break; 
+		switch (tt) {
+		case OUT_PUSH:
+			j = strip.new_label();
+			stl.push(j);
+			t.int_val = j;
+			t.stt = OUT_LABEL;
+			break;
 		case OUT_POPL:
 			j = stl.pop();
 			t.stt = OUT_LABEL;
@@ -145,5 +145,150 @@ private:
 			out((sttype)s);
 		}
 		return s;
+	}
+
+	void execute() {
+		int strip_pointer = 1;
+		sttype stt;
+		exstel X, Y;
+		int j;
+		int it_counter = 1;
+		while (true)
+		{
+			X.reset();
+			Y.reset();
+			stt = strip[strip_pointer].stt;
+			switch (stt)
+			{
+			case OUT_ID:
+			case OUT_I4:
+			case OUT_LONG:
+				exe.push(strip[strip_pointer++]);
+				break;
+			case OUT_LABEL:
+				X.int_val = strip[strip_pointer++].int_val;
+				X.stt = OUT_I4;
+				exe.push(X);
+				break;
+			case OUT_DEFL:
+				exe.pop(X);
+				strip_pointer++;
+				break;
+			case OUT_PUSH:
+				break;
+			case OUT_POPL:
+				break;
+			case OUT_SWAP:
+				break;
+			case OUT_BZ:
+				exe_pop(Y);
+				exe_pop(X);
+				if (X.int_val == 0) {
+					j = strip.find_DEF(Y.int_val);
+					if (j == -1) throw "exe label not found";
+					strip_pointer = j;
+				}
+				else {
+					strip_pointer++;
+				}
+				break;
+			case OUT_BR:
+				exe_pop(Y);
+				j = strip.find_DEF(Y.int_val);
+				if (j == -1) throw "exe label not found";
+				strip_pointer = j;
+				break;
+			case OUT_DIM:
+				exe.pop(Y);
+				exe.pop(X);	
+				X.data_type = Y.data_type;
+				j = syms.insert(X);
+				if (j == ST_EXISTS) throw "exe duplicate declaration";
+				strip_pointer++;
+				break;
+			case OUT_ASS:
+				exe_pop(X);
+				exe.pop(Y);
+				j = syms.find(Y);
+				if (j == ST_NOTFOUND) throw "exe identifier not found";
+				syms[j].int_val = X.int_val;
+				strip_pointer++;
+				break;
+			case OUT_ADD:
+			case OUT_SUB:
+			case OUT_MUL:
+			case OUT_DIV:
+			case OUT_EQ:
+			case OUT_NE:
+			case OUT_LT:
+			case OUT_GT:
+				exe_pop(Y);
+				exe_pop(X);
+				switch (stt)
+				{
+					case OUT_ADD:
+						X.int_val += Y.int_val;
+						break;
+					case OUT_SUB:
+						X.int_val -= Y.int_val;
+						break;
+					case OUT_MUL:
+						X.int_val *= Y.int_val;
+					case OUT_DIV:
+						if (Y.int_val == 0) throw "exe division by zero";
+						X.int_val /= Y.int_val;
+						break;
+					case OUT_EQ:
+						X.int_val = X.int_val == Y.int_val;
+						break;
+					case OUT_NE:
+						X.int_val = X.int_val != Y.int_val;
+						break;
+					case OUT_LT:
+						X.int_val = X.int_val < Y.int_val;
+						break;
+					case OUT_GT:
+						X.int_val = X.int_val > Y.int_val;
+						break;
+				
+				}
+				exe.push(X);
+				strip_pointer++;
+				break;
+			case OUT_PRINT:
+				exe_pop(Y);
+				fprintf(parse_stream, "exe print %d\n", Y.int_val);
+				strip_pointer++;
+				break;
+			case OUT_END:
+				fprintf(error_stream, "exe done\n\n");
+				return;
+			case OUT_INT:
+				break;
+			case OUT_R8:
+				break;
+			case OUT_LE:
+				break;
+			case OUT_GE:
+				break;
+			}
+			if (++it_counter > MAX_IT) throw "exe deadlock";
+		}
+	}
+	void exe_pop(exstel& e) {
+		exe.pop(e);
+		if (e.stt == OUT_I4) {
+
+		}
+		else if (e.stt == OUT_ID) {
+			int j = syms.find(e);
+			if (j == ST_NOTFOUND) throw "exe_pop identifier not found";
+			e.int_val = syms[j].int_val;
+			e.stt = OUT_I4;
+		}
+		else {
+			// неправильная лента ПОЛИЗ 
+			throw "exe_pop internal error";
+		}
 	}
 };
